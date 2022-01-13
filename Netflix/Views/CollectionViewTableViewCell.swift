@@ -10,6 +10,7 @@ import UIKit
 class CollectionViewTableViewCell: UITableViewCell {
 
     static let identifier = "CollectionViewTableViewCell"
+    var titles = [Title]()
     
     
     private let collectionView : UICollectionView = {
@@ -17,7 +18,8 @@ class CollectionViewTableViewCell: UITableViewCell {
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 140, height: 200)
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collection.register(TitleCollectionViewCell.self, forCellWithReuseIdentifier:TitleCollectionViewCell.identifier)
+        collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     
@@ -40,20 +42,34 @@ class CollectionViewTableViewCell: UITableViewCell {
     }
     
     
-    
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    //public
+    
+    public func configure(with model:[Title]){
+        self.titles = model
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+
+    
+    
 }
 
 extension CollectionViewTableViewCell : UICollectionViewDelegate,UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        
+        print("titles.count\(titles.count)")
+        return titles.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .green
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCollectionViewCell.identifier, for: indexPath) as! TitleCollectionViewCell
+        cell.configure(model: titles[indexPath.row].poster_path ?? "")
+//        cell.backgroundColor = .blue
         return cell
     }
     
