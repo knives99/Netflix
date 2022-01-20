@@ -142,6 +142,54 @@ class APICaller {
         task.resume()
     }
     
+    public func getDiscoverMoview(){
+        let url = Constants.baseUrl + "/3/discover/movie?api_key=\(Constants.API_KEY)&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate"
+        guard let url = URL(string: url) else {return}
+        var request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            guard let data = data , error == nil else {
+                return
+            }
+            
+            do {
+                let result = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                print(result)
+            }catch{
+                print(error)
+                
+            }
+        }
+        task.resume()
+        
+    }
+    
+    public func search(with query:String,completion:@escaping (Result<[Title],Error>) -> Void){
+        let url = Constants.baseUrl + "/3/search/movie?api_key=\(Constants.API_KEY)&query=\(query)"
+        guard let url = URL(string: url) else {return}
+        var request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            guard let data = data , error == nil else {
+                return
+            }
+            
+            do {
+
+//               let result = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+//               print(result)
+                let result = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
+                let titles = result.results
+                completion(.success(titles))
+            }catch{
+                print(error)
+                completion(.failure(error))
+                
+            }
+        }
+        task.resume()
+        
+        
+    }
+    
     
     
     

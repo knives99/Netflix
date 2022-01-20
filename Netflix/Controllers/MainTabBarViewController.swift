@@ -19,6 +19,7 @@ class MainTabBarViewController: UITabBarController {
         
         let navVC1 = UINavigationController(rootViewController: vc1)
         let navVC2 = UINavigationController(rootViewController: vc2)
+        
         let navVC3 = UINavigationController(rootViewController: vc3)
         let navVC4 = UINavigationController(rootViewController: vc4)
         

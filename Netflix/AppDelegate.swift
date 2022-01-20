@@ -32,16 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func fixBug(){
-//        APICaller.shared.getPopularMovie { result in
-//            switch result{
-//            case .success(let result):
-//                for i in result {
-//                    print(i.poster_path)
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
     }
 
 
